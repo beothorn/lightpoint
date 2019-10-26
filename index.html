@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LightPoint</title>
+    <style>
+            * {
+                margin: 0px;
+                padding: 0px;
+            }
+
+            html, body {
+                height: 100%;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .grid{
+                height: 100%;
+                display: grid;
+            }
+
+            h1{
+                font-size: 5em;
+            }
+
+            p{
+                font-size: 2em;
+            }
+
+            ul{
+                font-size: 2em;
+            }
+
+            .centered{
+                justify-self: center;
+                align-self: center;
+            }
+
+            .layout-title{
+                grid-template-columns: 1fr;
+                grid-template-rows: 0.6fr 1.4fr 0.8fr;
+            }
+
+            .layout-title div#header{
+                padding: 5em;
+            }
+
+            .layout-title div#body{
+                padding: 5em;
+            }
+
+            .layout-title-and-two-content{
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 0.6fr 1.4fr 0.8fr;
+            }
+
+    </style>
+</head>
+<body>
+    
+    <div class="slide grid layout-title">
+        <div id="header" class="centered">
+            <h1>Lightpoint</h1>
+        </div>
+        <div class="centered">
+            <p>A simple html template for slide presentations</p>
+        </div>
+        <div id="footer">
+        </div>
+    </div>
+
+    <div class="slide grid layout-title">
+        <div id="header" class="centered">
+            <h1>What</h1>
+        </div>
+        <div id="body">
+            <ul>
+                <li>Leverage html knowledge</li>
+                <li>Browser instead of presentation software</li>
+            </ul>
+        </div>
+        <div id="footer">
+        </div>
+    </div>
+
+    <div class="slide grid layout-title">
+        <div id="header" class="centered">
+            <h1>How</h1>
+        </div>
+        <div id="body">
+            <ul>
+                <li>Single file</li>
+                <li>Basic grid layouts</li>
+                <li>Js code to change layouts</li>
+                <li>Template, not framework</li>
+                <li>Copy + Paste + Edit</li>
+            </ul>
+        </div>
+        <div id="footer">
+        </div>
+    </div>
+
+    <div class="slide grid layout-title">
+        <div id="header" class="centered">
+            <h1>Out of scope</h1>
+        </div>
+        <div id="body">
+            <ul>
+                <li>Themes</li>
+                <li>Plugins</li>
+                <li>Lots of features</li>
+                <li>Multiplatform support</li>
+            </ul>
+        </div>
+        <div id="footer">
+        </div>
+    </div>
+
+<script>
+
+const getUrlVars = () => {
+    let vars = {}
+    window.location.hash.replace(/[#&]+([^=&]+)=([^&]*)/gi, (m,key,value) => vars[key] = value)
+    return vars 
+}
+
+const setUrlVar = (key, value) => {
+    const oldHref = window.location.hash
+    let merkerIndex = oldHref.indexOf('#')
+    let pageUrl = oldHref.substring(0, merkerIndex)
+    if(merkerIndex === -1) pageUrl = oldHref
+    let vars = getUrlVars()
+    if(vars[key] && vars[key] === value) return
+    vars[key] = value
+    let params = ""
+    for (const [key, value] of Object.entries(vars)) {
+        if(!params)
+            params += `${key}=${value}`
+        else
+            params += `&${key}=${value}`
+    }
+    window.location.hash = params
+}
+
+console.log(getUrlVars()["slide"])
+
+console.log(getUrlVars()["fragment"])
+
+setUrlVar("slide", "1")
+
+let slides = Array.from(document.querySelectorAll(".slide"))
+let currentSlide = 0
+let lastSlide = slides.length - 1 
+const showSlide = (slideIndex) => {
+    slides.forEach(s => s.style.display = "none")
+    slides[slideIndex].style.display = null
+}
+const setSlide = (slideIndex) => {
+    currentSlide = slideIndex
+    currentSlide = currentSlide < 0 ? 0 : currentSlide
+    currentSlide = currentSlide > lastSlide ? lastSlide : currentSlide
+    setUrlVar("slide", currentSlide)
+    showSlide(currentSlide)
+}
+const nextSlide = () => setSlide(currentSlide + 1)
+const previousSlide = () => setSlide(currentSlide - 1)
+setSlide(0)
+
+document.onkeydown = (e) => {
+    const left = 37
+    const right = 39
+    const backspace = 8
+    const space = 32
+    switch(e.keyCode){
+        case left:
+        case backspace:
+            previousSlide()
+            break
+        case right:
+        case space:
+            nextSlide()
+            break
+    }
+}
+
+</script>
+</body>
+</html> 
