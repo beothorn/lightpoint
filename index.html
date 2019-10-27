@@ -24,11 +24,7 @@
                 font-size: 5em;
             }
 
-            p{
-                font-size: 2em;
-            }
-
-            ul{
+            p,ul{
                 font-size: 2em;
             }
 
@@ -39,20 +35,22 @@
 
             .layout-title{
                 grid-template-columns: 1fr;
-                grid-template-rows: 0.6fr 1.4fr 0.8fr;
+                grid-template-rows: 0.6fr 1.5fr 0.9fr;
             }
 
-            .layout-title div#header{
+            .header{
                 padding: 5em;
+                justify-self: center;
+                align-self: center;
             }
 
-            .layout-title div#body{
-                padding: 5em;
+            .layout-title-content{
+                grid-template-columns: 1fr;
+                grid-template-rows: 0.4fr 1.6fr;
             }
 
-            .layout-title-and-two-content{
-                grid-template-columns: 1fr 1fr;
-                grid-template-rows: 0.6fr 1.4fr 0.8fr;
+            .layout-title-content div.body{
+                padding-left: 5em;
             }
 
     </style>
@@ -60,60 +58,101 @@
 <body>
     
     <div class="slide grid layout-title">
-        <div id="header" class="centered">
+        <div class="header">
             <h1>Lightpoint</h1>
         </div>
         <div class="centered">
             <p>A simple html template for slide presentations</p>
         </div>
-        <div id="footer">
+        <div class="footer">
         </div>
     </div>
 
-    <div class="slide grid layout-title">
-        <div id="header" class="centered">
-            <h1>What</h1>
+    <div class="slide grid layout-title-content">
+        <div class="header">
+            <h1>Why</h1>
         </div>
-        <div id="body">
+        <div class="body">
             <ul>
                 <li>Leverage html knowledge</li>
                 <li>Browser instead of presentation software</li>
             </ul>
         </div>
-        <div id="footer">
-        </div>
     </div>
 
-    <div class="slide grid layout-title">
-        <div id="header" class="centered">
+    <div class="slide grid layout-title-content">
+        <div class="header">
             <h1>How</h1>
         </div>
-        <div id="body">
+        <div class="body">
             <ul>
                 <li>Single file</li>
                 <li>Basic grid layouts</li>
-                <li>Js code to change layouts</li>
+                <li>JS for slide changing</li>
                 <li>Template, not framework</li>
-                <li>Copy + Paste + Edit</li>
+                <li>Copy -> Paste -> Edit</li>
             </ul>
-        </div>
-        <div id="footer">
         </div>
     </div>
 
-    <div class="slide grid layout-title">
-        <div id="header" class="centered">
+    <div class="slide grid layout-title-content">
+        <div class="header">
             <h1>Out of scope</h1>
         </div>
-        <div id="body">
+        <div class="body">
             <ul>
                 <li>Themes</li>
                 <li>Plugins</li>
+                <li>Animations</li>
                 <li>Lots of features</li>
                 <li>Multiplatform support</li>
             </ul>
         </div>
-        <div id="footer">
+    </div>
+
+    <div class="slide grid layout-title-content">
+        <div class="header">
+            <h1>Grid inline</h1>
+        </div>
+        <div>
+            <div style="
+                height: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 0.2fr 1fr 0.8fr;
+            ">
+                <h2 style="
+                    justify-self: center;
+                    align-self: center;
+                ">Pros</h2>
+                <h2 style="
+                    justify-self: center;
+                    align-self: center;
+                ">Cons</h2>
+                <div style="
+                    padding-left: 3em;
+                ">
+                    <ul>
+                        <li>Fine-grained control</li>
+                        <li>Use and throw away</li>
+                        <li>Easy quick fixes</li>
+                    </ul>
+                </div>
+                <div style="
+                    padding-left: 3em;
+                ">
+                    <ul>
+                        <li>Verbose</li>
+                        <li>Harder to maintain</li>
+                        <li>Can't reuse</li>
+                    </ul>
+                </div>
+                <h2 style="
+                    justify-self: center;
+                    grid-column-start: 1;
+                    grid-column-end: 3;
+                ">Up to you</h2>
+            </div>
         </div>
     </div>
 
@@ -143,12 +182,6 @@ const setUrlVar = (key, value) => {
     window.location.hash = params
 }
 
-console.log(getUrlVars()["slide"])
-
-console.log(getUrlVars()["fragment"])
-
-setUrlVar("slide", "1")
-
 let slides = Array.from(document.querySelectorAll(".slide"))
 let currentSlide = 0
 let lastSlide = slides.length - 1 
@@ -157,7 +190,7 @@ const showSlide = (slideIndex) => {
     slides[slideIndex].style.display = null
 }
 const setSlide = (slideIndex) => {
-    currentSlide = slideIndex
+    currentSlide = parseInt(slideIndex)
     currentSlide = currentSlide < 0 ? 0 : currentSlide
     currentSlide = currentSlide > lastSlide ? lastSlide : currentSlide
     setUrlVar("slide", currentSlide)
@@ -165,7 +198,11 @@ const setSlide = (slideIndex) => {
 }
 const nextSlide = () => setSlide(currentSlide + 1)
 const previousSlide = () => setSlide(currentSlide - 1)
-setSlide(0)
+
+if(getUrlVars()["slide"])
+    setSlide(getUrlVars()["slide"])
+else
+    setSlide("0")
 
 document.onkeydown = (e) => {
     const left = 37
