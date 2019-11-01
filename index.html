@@ -53,13 +53,6 @@
             .layout-title-content div.body{
                 padding-left: 5em;
             }
-
-            .border-highlight{
-                border-style: dotted;
-                border-width: 2px;
-                border-color: red;
-            }
-
     </style>
 </head>
 <body>
@@ -119,15 +112,72 @@
         </div>
     </div>
 
-    <div class="slide grid layout-title-content border-highlight">
+    <div class="slide grid layout-title-content" style="background-color: #845EC2;">
         <div class="header">
-            <h1>Grid Based Layout</h1>
+            <h1>Grid</h1>
         </div>
-        <div class="body">
-            <ul>
-                <li>This presentation elements layout works like this.</li>
-                <li>Red grids highlight this template structure. </li>
-            </ul>
+        <div>
+            <div style="
+                height: 100%;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-rows: 1fr 1fr;
+            ">
+                <div style="
+                    background-color: #008E50;
+                    grid-row-start: 1;
+                    grid-row-end: 3;
+                    display: inline-grid;
+                ">
+                    <div style="
+                        justify-self: center;
+                        align-self: center;
+                        transform: rotate(-90.0deg);
+                        font-size: 3em;                
+                    ">
+                        <p>Layout<p>
+                    </div>
+                </div>
+                <div style="
+                    background-color: #008D96; 
+                    display: inline-grid;  
+                ">
+                    <div style="
+                        display: grid-inline;
+                        justify-self: center;
+                        align-self: center;
+                        font-size: 1em;
+                    ">
+                        <p>is<p>
+                    </div>
+                </div>
+                <div style="
+                    display: inline-grid; 
+                    background-color: #BE6100; 
+                ">
+                    <div style="
+                        font-size: 3em;
+                        justify-self: start;
+                        align-self: center;
+                    ">
+                        <p>really<p>
+                    </div>
+                </div>
+                <div style="
+                    display: inline-grid; 
+                    background-color: #EE2828; 
+                    grid-column-start: 2;
+                    grid-column-end: 4;
+                ">
+                    <div style="
+                        font-size: 3em;
+                        justify-self: center;
+                        align-self: center;
+                    ">
+                        <p>Awesome<p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
