@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LightPoint</title>
+    <style>
+            * {
+                margin: 0px;
+                padding: 0px;
+                border: inherit;
+            }
+
+            html, body {
+                height: 100%;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .grid{
+                height: 100%;
+                display: grid;
+            }
+
+            h1{
+                font-size: 5em;
+            }
+
+            p,ul{
+                font-size: 2em;
+            }
+
+            .centered{
+                justify-self: center;
+                align-self: center;
+            }
+
+            .layout-title{
+                grid-template-columns: 1fr;
+                grid-template-rows: 0.6fr 1.5fr 0.9fr;
+            }
+
+            .header{
+                padding: 5em;
+                justify-self: center;
+                align-self: center;
+            }
+
+            .layout-title-content{
+                grid-template-columns: 1fr;
+                grid-template-rows: 0.4fr 1.6fr;
+            }
+
+            .layout-title-content div.body{
+                padding-left: 5em;
+            }
+    </style>
+</head>
+<body>
+    
+    <div class="slide grid layout-title">
+        <div class="header">
+            <h1>Lightpoint</h1>
+        </div>
+        <div class="centered">
+            <p>A simple html template for slide presentations</p>
+            <p style="text-align: center;">Space or right arrow to continue</p>
+        </div>
+    </div>
+
+    <div class="slide grid" style="
+        background-image: url('willian-justen-de-vasconcellos-7jwHx5q7WeA-unsplash.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        grid-template-rows: 2.2fr 0.5fr 0.3fr;
+    ">
+        <span></span>
+        <div style="
+            width: 100%;
+            background-color: #272727ed;
+            color: white;
+            display: inline-grid;
+        ">
+            <div style="
+                justify-self: center;
+                align-self: center;
+                font-size: 2.5em;     
+                font-weight: bold;           
+            ">
+                <p>Nice caption<p>
+            </div>
+        </div>
+        <span></span>
+    </div>
+<script>
+
+const getUrlVars = () => {
+    let vars = {}
+    window.location.hash.replace(/[#&]+([^=&]+)=([^&]*)/gi, (m,key,value) => vars[key] = value)
+    return vars 
+}
+
+const setUrlVar = (key, value) => {
+    const oldHref = window.location.hash
+    let merkerIndex = oldHref.indexOf('#')
+    let pageUrl = oldHref.substring(0, merkerIndex)
+    if(merkerIndex === -1) pageUrl = oldHref
+    let vars = getUrlVars()
+    if(vars[key] && vars[key] === value) return
+    vars[key] = value
+    let params = ""
+    for (const [key, value] of Object.entries(vars)) {
+        if(!params)
+            params += `${key}=${value}`
+        else
+            params += `&${key}=${value}`
+    }
+    window.location.hash = params
+}
+
+let slides = Array.from(document.querySelectorAll(".slide"))
+let currentSlide = 0
+let lastSlide = slides.length - 1 
+const showSlide = (slideIndex) => {
+    slides.forEach(s => s.style.display = "none")
+    slides[slideIndex].style.display = null
+}
+const setSlide = (slideIndex) => {
+    currentSlide = parseInt(slideIndex)
+    currentSlide = currentSlide < 0 ? 0 : currentSlide
+    currentSlide = currentSlide > lastSlide ? lastSlide : currentSlide
+    setUrlVar("slide", currentSlide)
+    showSlide(currentSlide)
+}
+const nextSlide = () => setSlide(currentSlide + 1)
+const previousSlide = () => setSlide(currentSlide - 1)
+
+if(getUrlVars()["slide"])
+    setSlide(getUrlVars()["slide"])
+else
+    setSlide("0")
+
+document.onkeydown = (e) => {
+    const left = 37
+    const right = 39
+    const backspace = 8
+    const space = 32
+    switch(e.keyCode){
+        case left:
+        case backspace:
+            previousSlide()
+            break
+        case right:
+        case space:
+            nextSlide()
+            break
+    }
+}
+
+</script>
+</body>
+</html> 
